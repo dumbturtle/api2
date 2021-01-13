@@ -1,2 +1,11 @@
-TOKEN="8bb2d4597772e92e404c2d20329449ad709af107"
-URL="https://api-ssl.bitly.com/v4/user"
+# settings.py
+from dotenv import load_dotenv
+load_dotenv()
+
+# OR, the same with increased verbosity:
+load_dotenv(verbose=True)
+
+# OR, explicitly providing path to '.env'
+from pathlib import Path  # python3 only
+env_path = Path('.') / '.env'
+load_dotenv(dotenv_path=env_path)   

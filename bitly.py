@@ -7,8 +7,6 @@ from urllib.parse import urlparse
 import requests
 from dotenv import load_dotenv
 
-load_dotenv()
-
 
 def createParser():
     parser = argparse.ArgumentParser()
@@ -61,9 +59,13 @@ def handler_url(url):
         short_url = os.getenv("ERROR_TEXT")
     return short_url
 
-
-if __name__ == "__main__":
+def main():
+    load_dotenv()
     parser = createParser()
     namespace = parser.parse_args()
     bilty_url = namespace.asked_url
     print(handler_url(bilty_url))
+
+if __name__ == "__main__":
+    main()
+

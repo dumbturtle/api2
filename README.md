@@ -12,7 +12,7 @@
 
 ```$pip install -r requirements.txt```
 - Переименовываем `.env_template` в `env`
-- В файле `.env` прописываем свое TOKEN для сайта [bitly.com](https://bitly.com) 
+- В файле `.env` необходимо прописать свой TOKEN полученный на сайте [bitly.com](https://bitly.com) 
 - Запускаем скрипт:  
 
 ```$python settings.py```

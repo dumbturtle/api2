@@ -5,8 +5,9 @@ import sys
 from urllib.parse import urlparse
 
 import requests
+from dotenv import load_dotenv
 
-import settings
+load_dotenv()
 
 
 def createParser():
@@ -22,7 +23,9 @@ def createParser():
 def shorten_link(url, token):
     headers = {"Authorization": f"Bearer { token }"}
     bilty_url = {"long_url": url}
-    response_data = requests.post(os.getenv("LINK_URL"), headers=headers, json=bilty_url)
+    response_data = requests.post(
+        os.getenv("LINK_URL"), headers=headers, json=bilty_url
+    )
     response_data.raise_for_status()
     bilty_link = response_data.json().get("link")
     return bilty_link

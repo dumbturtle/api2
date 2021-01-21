@@ -18,7 +18,7 @@
 ```$python settings.py```
 - Запускаем скрипт для создания короткой ссылки:  
 
-```$python bilty.py https://google.com``` 
+```$python bitly.py https://google.com``` 
 - Запускаем скрипт для проверки количества переходов: 
 
 ```$python bitly.py https://bit.ly/39sujsV```

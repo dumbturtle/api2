@@ -59,14 +59,15 @@ def count_clicks_link(link, token):
 def handler_url(url):
     try:
         if is_bitlink(url, os.getenv("TOKEN")):
-            clicks = (
-                f"Количество переходов: {count_clicks_link(url, os.getenv('TOKEN'))}"
-            )
+            count_clicks = count_clicks_link(url, os.getenv("TOKEN"))
+            clicks = f"Количество переходов: { count_clicks }"
             return clicks
-        short_url = f"Краткая ссылка: {shorten_link(url, os.getenv('TOKEN'))}"
-        return short_url
+        link = shorten_link(url, os.getenv("TOKEN"))
+        bitly_link = f"Краткая ссылка: { link }"
+        return bitly_link
     except requests.exceptions.HTTPError:
-        return os.getenv("ERROR_TEXT")
+        message_error = os.getenv("ERROR_TEXT")
+        return message_error
 
 
 def main():

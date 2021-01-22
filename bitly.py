@@ -8,7 +8,7 @@ import requests
 from dotenv import load_dotenv
 
 
-def createParser():
+def create_commandline_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "asked_url",
@@ -32,7 +32,7 @@ def is_bitlink(link, token):
     return response_data.ok
 
 
-def shorten_link(url, token):
+def create_short_link(url, token):
     headers = {"Authorization": f"Bearer { token }"}
     bitly_url = {"long_url": url}
     response_data = requests.post(
@@ -62,8 +62,8 @@ def handler_url(url):
             count_clicks = count_clicks_link(url, os.getenv("TOKEN"))
             clicks = f"Количество переходов: { count_clicks }"
             return clicks
-        link = shorten_link(url, os.getenv("TOKEN"))
-        bitly_link = f"Краткая ссылка: { link }"
+        short_link = create_short_link(url, os.getenv("TOKEN"))
+        bitly_link = f"Краткая ссылка: { short_link }"
         return bitly_link
     except requests.exceptions.HTTPError:
         message_error = os.getenv("ERROR_TEXT")
@@ -72,9 +72,9 @@ def handler_url(url):
 
 def main():
     load_dotenv()
-    parser = createParser()
-    namespace = parser.parse_args()
-    bitly_url = namespace.asked_url
+    commandline = create_commandline_parser()
+    user_arguments = commandline.parse_args()
+    bitly_url = user_arguments.asked_url
     print(handler_url(bitly_url))
 
 

@@ -56,13 +56,13 @@ def count_clicks_link(link, token):
     return sum_clicks
 
 
-def handler_url(url):
+def handler_link(link, token, message_error):
     try:
-        if is_bitlink(url, os.getenv("TOKEN")):
-            count_clicks = count_clicks_link(url, os.getenv("TOKEN"))
+        if is_bitlink(link, token):
+            count_clicks = count_clicks_link(link, token)
             clicks = f"Количество переходов: { count_clicks }"
             return clicks
-        short_link = create_short_link(url, os.getenv("TOKEN"))
+        short_link = create_short_link(link, token)
         bitly_link = f"Краткая ссылка: { short_link }"
         return bitly_link
     except requests.exceptions.HTTPError:
@@ -72,10 +72,13 @@ def handler_url(url):
 
 def main():
     load_dotenv()
+    token = os.getenv("TOKEN")
+    message_error = os.getenv("ERROR_TEXT")
     commandline = create_commandline_parser()
     user_arguments = commandline.parse_args()
-    bitly_url = user_arguments.asked_url
-    print(handler_url(bitly_url))
+    bitly_link = user_arguments.asked_url
+    message = handler_link(bitly_link, token, message_error)
+    print(message)
 
 
 if __name__ == "__main__":

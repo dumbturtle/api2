@@ -32,12 +32,10 @@ def is_bitlink(link, token):
     return response_data.ok
 
 
-def create_short_link(url, token):
+def create_short_link(url, api_bitly, token):
     headers = {"Authorization": f"Bearer { token }"}
     bitly_url = {"long_url": url}
-    response_data = requests.post(
-        os.getenv("LINK_URL"), headers=headers, json=bitly_url
-    )
+    response_data = requests.post(api_bitly, headers=headers, json=bitly_url)
     response_data.raise_for_status()
     bitly_link = response_data.json().get("link")
     return bitly_link
@@ -47,8 +45,8 @@ def count_clicks_link(link, token):
     headers = {"Authorization": f"Bearer { token }"}
     sum_clicks = 0
     link = convert_bitlink(link)
-    bit_link = f"https://api-ssl.bitly.com/v4/bitlinks/{link}/clicks"
-    response_data = requests.get(bit_link, headers=headers)
+    count_bitly = f"https://api-ssl.bitly.com/v4/bitlinks/{link}/clicks"
+    response_data = requests.get(count_bitly, headers=headers)
     response_data.raise_for_status()
     clicks = response_data.json().get("link_clicks")
     for click in clicks:
@@ -56,17 +54,16 @@ def count_clicks_link(link, token):
     return sum_clicks
 
 
-def handler_link(link, token, message_error):
+def handler_link(link, token, api_bitly, message_error):
     try:
         if is_bitlink(link, token):
             count_clicks = count_clicks_link(link, token)
             clicks = f"Количество переходов: { count_clicks }"
             return clicks
-        short_link = create_short_link(link, token)
+        short_link = create_short_link(link, api_bitly, token)
         bitly_link = f"Краткая ссылка: { short_link }"
         return bitly_link
     except requests.exceptions.HTTPError:
-        message_error = os.getenv("ERROR_TEXT")
         return message_error
 
 
@@ -74,10 +71,11 @@ def main():
     load_dotenv()
     token = os.getenv("TOKEN")
     message_error = os.getenv("ERROR_TEXT")
+    api_bitly = os.getenv("LINK_URL")
     commandline = create_commandline_parser()
     user_arguments = commandline.parse_args()
     bitly_link = user_arguments.asked_url
-    message = handler_link(bitly_link, token, message_error)
+    message = handler_link(bitly_link, token, api_bitly, message_error)
     print(message)
 
 

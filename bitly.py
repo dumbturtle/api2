@@ -28,16 +28,16 @@ def is_bitlink(link, token):
     link = convert_bitlink(link)
     headers = {"Authorization": f"Bearer { token }"}
     bit_link = f"https://api-ssl.bitly.com/v4/bitlinks/{link}/clicks"
-    response_data = requests.get(bit_link, headers=headers)
-    return response_data.ok
+    response_bitly = requests.get(bit_link, headers=headers)
+    return response_bitly.ok
 
 
 def create_short_link(url, api_bitly, token):
     headers = {"Authorization": f"Bearer { token }"}
     bitly_url = {"long_url": url}
-    response_data = requests.post(api_bitly, headers=headers, json=bitly_url)
-    response_data.raise_for_status()
-    bitly_link = response_data.json().get("link")
+    response_bitly = requests.post(api_bitly, headers=headers, json=bitly_url)
+    response_bitly.raise_for_status()
+    bitly_link = response_bitly.json().get("link")
     return bitly_link
 
 
@@ -46,9 +46,9 @@ def count_clicks_link(link, token):
     sum_clicks = 0
     link = convert_bitlink(link)
     count_bitly = f"https://api-ssl.bitly.com/v4/bitlinks/{link}/clicks"
-    response_data = requests.get(count_bitly, headers=headers)
-    response_data.raise_for_status()
-    clicks = response_data.json().get("link_clicks")
+    response_bitly = requests.get(count_bitly, headers=headers)
+    response_bitly.raise_for_status()
+    clicks = response_bitly.json().get("link_clicks")
     for click in clicks:
         sum_clicks = sum_clicks + click.get("clicks", 0)
     return sum_clicks

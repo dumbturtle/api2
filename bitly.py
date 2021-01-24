@@ -54,7 +54,7 @@ def count_clicks_link(link, token):
     return sum_clicks
 
 
-def handler_link(link, token, api_bitly, message_error):
+def process_query_link(link, token, api_bitly, message_error):
     try:
         if is_bitlink(link, token):
             count_clicks = count_clicks_link(link, token)
@@ -75,7 +75,7 @@ def main():
     commandline = create_commandline_parser()
     user_arguments = commandline.parse_args()
     bitly_link = user_arguments.asked_url
-    message = handler_link(bitly_link, token, api_bitly, message_error)
+    message = process_query_link(bitly_link, token, api_bitly, message_error)
     print(message)
 
 

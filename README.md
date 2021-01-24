@@ -12,7 +12,7 @@
 
 ```$pip install -r requirements.txt```
 - Переименовываем `.env_template` в `env`
-- В файле `.env` необходимо прописать свой TOKEN полученный на сайте [bitly.com](https://bitly.com) 
+- В файле `.env` необходимо прописать свой BITLY_API_TOKEN полученный на сайте [bitly.com](https://bitly.com) 
 - Запускаем скрипт:  
 
 ```$python bitly.py https://google.com``` 

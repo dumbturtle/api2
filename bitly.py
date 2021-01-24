@@ -69,7 +69,7 @@ def handler_link(link, token, api_bitly, message_error):
 
 def main():
     load_dotenv()
-    token = os.getenv("TOKEN")
+    bitly_api_token = os.getenv("BITLY_API_TOKEN")
     message_error = os.getenv("ERROR_TEXT")
     api_bitly = os.getenv("LINK_URL")
     commandline = create_commandline_parser()

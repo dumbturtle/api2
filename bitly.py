@@ -16,8 +16,8 @@ def create_commandline_parser():
 
 
 def cut_bitlink(link):
-    https_link = "https"
-    if link.startswith(https_link):
+    http_link = "http"
+    if link.startswith(http_link):
         link = f"{urlparse(link).netloc}{urlparse(link).path}"
     return link
 

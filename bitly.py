@@ -17,15 +17,15 @@ def create_commandline_parser():
     return parser
 
 
-def convert_bitlink(link):
+def cut_bitlink(link):
     link_https = "https"
     if link.startswith(link_https):
         link = f"{urlparse(link).netloc}{urlparse(link).path}"
     return link
 
 
-def is_bitlink(link, token):
-    link = convert_bitlink(link)
+def is_bitlink(link, token):    
+    link = cut_bitlink(link)
     headers = {"Authorization": f"Bearer { token }"}
     bit_link = f"https://api-ssl.bitly.com/v4/bitlinks/{link}/clicks"
     response_bitly = requests.get(bit_link, headers=headers)
@@ -44,9 +44,9 @@ def create_short_link(url, api_bitly, token):
 def count_clicks_link(link, token):
     headers = {"Authorization": f"Bearer { token }"}
     sum_clicks = 0
-    link = convert_bitlink(link)
-    count_bitly = f"https://api-ssl.bitly.com/v4/bitlinks/{link}/clicks"
-    response_bitly = requests.get(count_bitly, headers=headers)
+    link = cut_bitlink(link)
+    bitly_api_click_url = f"https://api-ssl.bitly.com/v4/bitlinks/{link}/clicks"
+    response_bitly = requests.get(bitly_api_click_url, headers=headers)
     response_bitly.raise_for_status()
     clicks = response_bitly.json().get("link_clicks")
     for click in clicks:
@@ -72,10 +72,10 @@ def main():
     bitly_api_token = os.getenv("BITLY_API_TOKEN")
     message_error = os.getenv("ERROR_TEXT")
     api_bitly = os.getenv("LINK_URL")
-    commandline = create_commandline_parser()
-    user_arguments = commandline.parse_args()
+    commandline_parser = create_commandline_parser()
+    user_arguments = commandline_parser.parse_args()
     bitly_link = user_arguments.asked_url
-    message = process_query_link(bitly_link, token, api_bitly, message_error)
+    message = process_query_link(bitly_link, bitly_api_token, api_bitly, message_error)
     print(message)
 
 

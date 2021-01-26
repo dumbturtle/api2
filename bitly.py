@@ -52,7 +52,7 @@ def count_link_clicks(link, token):
 def process_query_link(link, token, api_bitly, message_error):
     if is_bitlink(link, token):
         quantity_clicks_link = count_link_clicks(link, token)
-        return f"Количество переходов: { quantity_link_clicks }"
+        return f"Количество переходов: { quantity_clicks_link }"
     short_link = create_short_link(link, api_bitly, token)
     return f"Краткая ссылка: { short_link }"
 
@@ -61,13 +61,13 @@ def main():
     load_dotenv()
     bitly_api_token = os.getenv("BITLY_API_TOKEN")
     error_message = os.getenv("ERROR_TEXT")
-    bitly_api = os.getenv("LINK_URL")
+    bitly_api_url = os.getenv("BILTY_API_URL")
     commandline_parser = create_commandline_parser()
     user_arguments = commandline_parser.parse_args()
     user_link = user_arguments.asked_url
     try:
         message = process_query_link(
-            user_link, bitly_api_token, bitly_api, message_error
+            user_link, bitly_api_token, bitly_api_url, error_message
         )
     except requests.exceptions.HTTPError:
         message = error_message

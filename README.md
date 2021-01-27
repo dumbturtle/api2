@@ -10,14 +10,20 @@
 - Скачиваем скрипт с [github](https://github.com/dumbturtle/api2)
 - Устанавливаем необходимые пакеты: 
 
-```$pip install -r requirements.txt```
+```
+$ pip install -r requirements.txt
+```
 - Переименовываем `.env_template` в `env`
 - В файле `.env` необходимо прописать свой BITLY_API_TOKEN полученный на сайте [bitly.com](https://bitly.com) 
 - Запускаем скрипт:  
 
-```$python bitly.py https://google.com``` 
+```
+$ python bitly.py https://google.com
+``` 
 - Запускаем скрипт для проверки количества переходов: 
 
-```$python bitly.py https://bit.ly/39sujsV```
+```
+$ python bitly.py https://bit.ly/39sujsV
+```
 
 Если при запуске возникнет ошибка, будет выведено соответствующее сообщение в консоли.

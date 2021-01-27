@@ -15,45 +15,48 @@ def create_commandline_parser():
     return parser
 
 
-def cut_bitlink(link):
+def cut_bitlink(user_link):
     http_link = "http"
-    if link.startswith(http_link):
-        link = f"{urlparse(link).netloc}{urlparse(link).path}"
-    return link
+    processed_link = user_link
+    if user_link.startswith(http_link):
+        processed_link = f"{urlparse(user_link).netloc}{urlparse(user_link).path}"
+    return processed_link
 
 
-def is_bitlink(link, token):
-    link = cut_bitlink(link)
-    headers = {"Authorization": f"Bearer { token }"}
-    bit_link = f"https://api-ssl.bitly.com/v4/bitlinks/{link}/clicks"
+def is_bitlink(user_link, bitly_api_token):
+    cut_user_link = cut_bitlink(user_link)
+    headers = {"Authorization": f"Bearer { bitly_api_token }"}
+    bit_link = f"https://api-ssl.bitly.com/v4/bitlinks/{ cut_user_link }/clicks"
     bitly_api_response = requests.get(bit_link, headers=headers)
     return bitly_api_response.ok
 
 
-def create_short_link(url, api_bitly, token):
-    headers = {"Authorization": f"Bearer { token }"}
-    bitly_url = {"long_url": url}
-    bitly_api_response = requests.post(api_bitly, headers=headers, json=bitly_url)
+def create_short_link(user_link, api_bitly, bitly_api_token):
+    headers = {"Authorization": f"Bearer { bitly_api_token }"}
+    bitly_user_link = {"long_url": user_link}
+    bitly_api_response = requests.post(api_bitly, headers=headers, json=bitly_user_link)
     bitly_api_response.raise_for_status()
     bitly_short_link = bitly_api_response.json().get("link")
     return bitly_short_link
 
 
-def count_link_clicks(link, token):
-    headers = {"Authorization": f"Bearer { token }"}
-    user_link = cut_bitlink(link)
-    bitly_api_click_url = f"https://api-ssl.bitly.com/v4/bitlinks/{user_link}/clicks/summary"
+def count_clicks_link(user_link, bitly_api_token):
+    headers = {"Authorization": f"Bearer { bitly_api_token }"}
+    cut_user_link = cut_bitlink(user_link)
+    bitly_api_click_url = (
+        f"https://api-ssl.bitly.com/v4/bitlinks/{ cut_user_link }/clicks/summary"
+    )
     bitly_api_response = requests.get(bitly_api_click_url, headers=headers)
     bitly_api_response.raise_for_status()
     bitly_sum_clicks = bitly_api_response.json().get("total_clicks")
     return bitly_sum_clicks
 
 
-def process_query_link(link, token, api_bitly, message_error):
-    if is_bitlink(link, token):
-        quantity_clicks_link = count_link_clicks(link, token)
+def process_query_link(user_link, bitly_api_token, bitly_api, error_message):
+    if is_bitlink(user_link, bitly_api_token):
+        quantity_clicks_link = count_clicks_link(user_link, bitly_api_token)
         return f"Количество переходов: { quantity_clicks_link }"
-    short_link = create_short_link(link, api_bitly, token)
+    short_link = create_short_link(user_link, bitly_api, bitly_api_token)
     return f"Краткая ссылка: { short_link }"
 
 

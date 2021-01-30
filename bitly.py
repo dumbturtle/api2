@@ -40,7 +40,7 @@ def create_short_link(user_link, bitly_api_link, bitly_api_token):
     return bitly_short_link
 
 
-def count_clicks_link(user_link, bitly_api_token):
+def count_link_clicks(user_link, bitly_api_token):
     headers = {"Authorization": f"Bearer { bitly_api_token }"}
     cut_user_link = cut_bitlink(user_link)
     bitly_api_click_link = (
@@ -54,8 +54,8 @@ def count_clicks_link(user_link, bitly_api_token):
 
 def process_query_link(user_link, bitly_api_token, bitly_api_link, error_message):
     if is_bitlink(user_link, bitly_api_token):
-        quantity_clicks_link = count_clicks_link(user_link, bitly_api_token)
-        return f"Количество переходов: { quantity_clicks_link }"
+        link_clicks_quantity = count_link_clicks(user_link, bitly_api_token)
+        return f"Количество переходов: { link_clicks_quantity }"
     short_link = create_short_link(user_link, bitly_api_link, bitly_api_token)
     return f"Краткая ссылка: { short_link }"
 
